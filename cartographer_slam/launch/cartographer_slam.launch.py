@@ -47,14 +47,6 @@ def generate_launch_description():
                     '-publish_period_sec', '1.0'
                 ]
             ),
-            Node(
-                package='rviz2',
-                executable='rviz2',
-                name='rviz2',
-                output='screen',
-                arguments=['-d', rviz_config_file],
-                parameters=[{'use_sim_time': sim_time}]
-            )
         ]
 
     return LaunchDescription([
