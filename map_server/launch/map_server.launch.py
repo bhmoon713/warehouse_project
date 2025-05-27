@@ -44,17 +44,20 @@ def generate_launch_description():
             name='rviz2',
             output='screen',
             arguments=['-d', rviz_config_file],
-            parameters=[{'use_sim_time': True}]
+            parameters=[{
+                'use_sim_time': True
+            }]
         ),
 
         Node(
             package='nav2_lifecycle_manager',
             executable='lifecycle_manager',
-            name='lifecycle_manager',
+            name='lifecycle_manager_mapper',
             output='screen',
             parameters=[{
-                'autostart': True,
-                'node_names': ['map_server']
+                'use_sim_time': True},
+                {'autostart': True},
+                {'node_names': ['map_server']
             }]
         )
     ])
