@@ -14,7 +14,8 @@ def launch_setup(context, *args, **kwargs):
     planner_yaml = os.path.join(config_dir, 'planner_sim.yaml' if use_sim_time else 'planner_real.yaml')
     recovery_yaml = os.path.join(config_dir, 'recoveries_sim.yaml' if use_sim_time else 'recoveries_real.yaml')
     rviz_config_file = os.path.join(get_package_share_directory('path_planner_server'), 'rviz', 'pathplanning.rviz')
-    cmd_vel_remap = ('/cmd_vel', '/diffbot_base_controller/cmd_vel_unstamped')
+    # cmd_vel_remap = ('/cmd_vel', '/diffbot_base_controller/cmd_vel_unstamped')
+    cmd_vel_remap = ('/cmd_vel', '/diffbot_base_controller/cmd_vel_unstamped' if use_sim_time else '/robot/cmd_vel')
 
     return [
         Node(

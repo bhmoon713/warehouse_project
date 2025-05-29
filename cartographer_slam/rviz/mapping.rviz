@@ -8,6 +8,7 @@ Panels:
         - /Status1
         - /Map1
         - /LaserScan1
+        - /TF1
       Splitter Ratio: 0.5
     Tree Height: 553
   - Class: rviz_common/Selection
@@ -104,10 +105,66 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        map:
+          Value: true
+        odom:
+          Value: true
+        robot_base_docking_contact_link:
+          Value: true
+        robot_base_footprint:
+          Value: true
+        robot_base_link:
+          Value: true
+        robot_evelator_base_link:
+          Value: true
+        robot_front_cover_link:
+          Value: true
+        robot_front_laser_base_link:
+          Value: true
+        robot_omni_backwheel_link:
+          Value: true
+        robot_omni_front_leftwheel_link:
+          Value: true
+        robot_omni_front_rightwheel_link:
+          Value: true
+        robot_top_cover_link:
+          Value: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        map:
+          odom:
+            robot_base_footprint:
+              robot_base_link:
+                robot_evelator_base_link:
+                  {}
+                robot_front_cover_link:
+                  robot_base_docking_contact_link:
+                    {}
+                robot_front_laser_base_link:
+                  {}
+                robot_omni_backwheel_link:
+                  {}
+                robot_omni_front_leftwheel_link:
+                  {}
+                robot_omni_front_rightwheel_link:
+                  {}
+              robot_top_cover_link:
+                {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: robot_base_footprint
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -150,16 +207,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 9.436324119567871
+      Distance: 11.498475074768066
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 1.961108922958374
+        Y: 0.10230958461761475
+        Z: -1.459058403968811
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
