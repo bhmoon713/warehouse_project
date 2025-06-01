@@ -10,7 +10,7 @@ def generate_launch_description():
     # Declare launch argument
     declare_map_file = DeclareLaunchArgument(
         'map_file',
-        default_value='warehouse_map_real.yaml',
+        default_value='warehouse_map_sim.yaml',
         description='YAML map file to load for localization'
     )
 
@@ -20,7 +20,7 @@ def generate_launch_description():
     # Paths
     nav2_yaml = os.path.join(
         get_package_share_directory('localization_server'),
-        'config', 'amcl_config_real.yaml'
+        'config', 'amcl_config_sim.yaml'
     )
 
     map_file_path = PathJoinSubstitution([
