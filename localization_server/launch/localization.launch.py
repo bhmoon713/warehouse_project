@@ -1,47 +1,36 @@
 import os
-
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from ament_index_python.packages import get_package_share_directory
+from launch.conditions import IfCondition, UnlessCondition
 from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
 
-def generate_launch_description():
-    # Declare launch argument
-    declare_map_file = DeclareLaunchArgument(
-        'map_file',
-        default_value='warehouse_map_real.yaml',
-        description='YAML map file to load for localization'
-    )
 
-    # Get config values
-    map_file = LaunchConfiguration('map_file')
+def launch_setup(context, *args, **kwargs):
+    map_file_value = LaunchConfiguration('map_file').perform(context)
+
+    # Determine flags from map filename
+    use_real = map_file_value.endswith('_real.yaml')
+    use_sim_time = not use_real
 
     # Paths
-    nav2_yaml = os.path.join(
-        get_package_share_directory('localization_server'),
-        'config', 'amcl_config_real.yaml'
-    )
+    pkg_localization = get_package_share_directory('localization_server')
+    pkg_map_server = get_package_share_directory('map_server')
 
-    map_file_path = PathJoinSubstitution([
-        get_package_share_directory('map_server'), 'config', map_file
-    ])
+    amcl_sim_config = os.path.join(pkg_localization, 'config', 'amcl_config_sim.yaml')
+    amcl_real_config = os.path.join(pkg_localization, 'config', 'amcl_config_real.yaml')
+    map_file_path = PathJoinSubstitution([pkg_map_server, 'config', map_file_value])
+    rviz_config_file = os.path.join(pkg_localization, 'rviz', 'local.rviz')
 
-    rviz_config_file = os.path.join(
-        get_package_share_directory('localization_server'),
-        'rviz', 'local.rviz'
-    )
-
-    return LaunchDescription([
-        declare_map_file,
-
+    return [
         Node(
             package='nav2_map_server',
             executable='map_server',
             name='map_server',
             output='screen',
             parameters=[
-                {'use_sim_time': True},
+                {'use_sim_time': use_sim_time},
                 {'yaml_filename': map_file_path}
             ]
         ),
@@ -51,7 +40,7 @@ def generate_launch_description():
             executable='amcl',
             name='amcl',
             output='screen',
-            parameters=[nav2_yaml]
+            parameters=[amcl_real_config if use_real else amcl_sim_config]
         ),
 
         Node(
@@ -60,7 +49,7 @@ def generate_launch_description():
             name='rviz2',
             output='screen',
             arguments=['-d', rviz_config_file],
-            parameters=[{'use_sim_time': True}]
+            parameters=[{'use_sim_time': use_sim_time}]
         ),
 
         Node(
@@ -69,9 +58,22 @@ def generate_launch_description():
             name='lifecycle_manager_localization',
             output='screen',
             parameters=[
-                {'use_sim_time': True},
+                {'use_sim_time': use_sim_time},
                 {'autostart': True},
                 {'node_names': ['map_server', 'amcl']}
             ]
         )
+    ]
+
+
+def generate_launch_description():
+    declare_map_file = DeclareLaunchArgument(
+        'map_file',
+        default_value='warehouse_map_sim.yaml',
+        description='YAML map file to load for localization'
+    )
+
+    return LaunchDescription([
+        declare_map_file,
+        OpaqueFunction(function=launch_setup)
     ])
