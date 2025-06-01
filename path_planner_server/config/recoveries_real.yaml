@@ -10,8 +10,10 @@ behavior_server:
       plugin: "nav2_behaviors/BackUp"
     wait:
       plugin: "nav2_behaviors/Wait"
-    global_frame: odom
+    # global_frame: odom
+    global_frame: map
     robot_base_frame: robot_base_footprint
+    odom_topic: /robot_odom
     transform_timeout: 0.1
     use_sim_time: true
     simulate_ahead_time: 2.0
